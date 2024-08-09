@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react
 export default function Signup({ navigation }) {
   return (
     <ImageBackground 
-      source={require('../assets/background.jpeg')} 
+      source={require('../assets/Designer2.jpeg')} 
       style={styles.background}>
 
       <View style={styles.container}>

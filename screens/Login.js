@@ -29,7 +29,7 @@ export default function LoginScreen() {
 
   return (
     <ImageBackground
-      source={require('../assets/background.jpeg')}
+      source={require('../assets/8.png')}
       style={styles.background}
     >
       <View style={styles.container}>
@@ -60,7 +60,7 @@ export default function LoginScreen() {
               <Text style={styles.buttonText}>Sign In</Text>
             )}
           </TouchableOpacity>
-          <Text style={styles.forgotPassword}>Forgot password?</Text>
+          <Text style={styles.forgotPassword}>Forgotten password?</Text>
         </View>
         <View style={styles.socialButtons}>
           <TouchableOpacity style={styles.socialButton}>
@@ -96,12 +96,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 48,
-    color: '#000',
+    color: 'white',
     fontWeight: 'bold',
   },
   subtitle: {
     fontSize: 16,
-    color: '#000',
+    color: 'white',
   },
   form: {
     width: '100%',
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   forgotPassword: {
-    color: '#000',
+    color: 'black',
     textDecorationLine: 'underline',
     marginBottom: 20,
   },
@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 110,
+    backgroundColor: 'white',
   },
   socialButtonText: {
     color: '#000',

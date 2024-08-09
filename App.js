@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Animated } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Animated, ImageBackground } from 'react-native';
 import Family from './screens/Family.js';
 import Devices from './screens/Devices.js';
 import Mantra from './screens/Mantra.js';
@@ -15,6 +15,7 @@ import Login from './screens/Login.js';
 import SignUp from './screens/SignUp.js';
 import Registration from './screens/Registration.js';
 import Bluetooth from './screens/Bluetooth.js';
+import SetupComplete from './screens/SetupComplete.js';
 
 const Stack = createStackNavigator();
 
@@ -36,69 +37,74 @@ const HomeScreen = ({route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Animated.View style={[styles.menuButtonContainer, { transform: [{ translateX: menuAnimation }] }]}>
-        <TouchableOpacity style={styles.menuButton} onPress={toggleMenu}>
-          <Text style={styles.menuButtonText}>≡</Text>
-        </TouchableOpacity>
-      </Animated.View>
+    <ImageBackground
+      source={require('./assets/11.png')} // Replace with your image path
+      style={styles.backgroundImage}
+    >
+      <View style={styles.container}>
+        <Animated.View style={[styles.menuButtonContainer, { transform: [{ translateX: menuAnimation }] }]}>
+          <TouchableOpacity style={styles.menuButton} onPress={toggleMenu}>
+            <Text style={styles.menuButtonText}>≡</Text>
+          </TouchableOpacity>
+        </Animated.View>
 
-      <Animated.View style={[styles.sideMenu, { transform: [{ translateX: menuAnimation }] }]}>
-      <TouchableOpacity onPress={() => navigation.navigate('Family')}>
-          <Text style={styles.sideMenuText}>Family</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Devices')}>
-          <Text style={styles.sideMenuText}>Devices</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Assistance')}>
-          <Text style={styles.sideMenuText}>Assistance</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-          <Text style={styles.sideMenuText}>Settings</Text>
-        </TouchableOpacity>
-      </Animated.View>
+        <Animated.View style={[styles.sideMenu, { transform: [{ translateX: menuAnimation }] }]}>
+          <TouchableOpacity onPress={() => navigation.navigate('Family')}>
+            <Text style={styles.sideMenuText}>Family</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Devices')}>
+            <Text style={styles.sideMenuText}>Devices</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Assistance')}>
+            <Text style={styles.sideMenuText}>Assistance</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+            <Text style={styles.sideMenuText}>Settings</Text>
+          </TouchableOpacity>
+        </Animated.View>
 
-      <View style={styles.header}>
-        <Text style={styles.greeting}>Hello, {name}!</Text>
-        <View style={styles.welcomer}>
-          <Text style={styles.welcome}>Welcome to your wellness app.</Text>
+        <View style={styles.header}>
+          <Text style={styles.greeting}>Hello, {name}!</Text>
+          <View style={styles.welcomer}>
+            <Text style={styles.welcome}>Welcome to your wellness app.</Text>
+          </View>
         </View>
-      </View>
 
-      <Text style={styles.roomsTitle}>Shortcuts</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.rooms}>
-        <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('SendVibes')}>
-          <Image source={require('./assets/favicon-16x16.png')} style={styles.roomImage} />
-          <View style={styles.roomNameOverlay}>
-            <Text style={styles.roomName}>Send vibes</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('Meditation')}>
-          <Image source={require('./assets/icon.png')} style={styles.roomImage} />
-          <View style={styles.roomNameOverlay}>
-            <Text style={styles.roomName}>Meditation</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('Mantra')}>
-          <Image source={require('./assets/splash.png')} style={styles.roomImage} />
-          <View style={styles.roomNameOverlay}>
-            <Text style={styles.roomName}>Mantra</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('BraceletColors')}>
-          <Image source={require('./assets/splash.png')} style={styles.roomImage} />
-          <View style={styles.roomNameOverlay}>
-            <Text style={styles.roomName}>Bracelet Colors</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('AppConfig')}>
-          <Image source={require('./assets/splash.png')} style={styles.roomImage} />
-          <View style={styles.roomNameOverlay}>
-            <Text style={styles.roomName}>App Configuration</Text>
-          </View>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
+        <Text style={styles.roomsTitle}>Shortcuts</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.rooms}>
+          <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('SendVibes')}>
+            <Image source={require('./assets/4.png')} style={styles.roomImage} />
+            <View style={styles.roomNameOverlay}>
+              <Text style={styles.roomName}>Send vibes</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('Meditation')}>
+            <Image source={require('./assets/3.png')} style={styles.roomImage} />
+            <View style={styles.roomNameOverlay}>
+              <Text style={styles.roomName}>Meditation</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('Mantra')}>
+            <Image source={require('./assets/5.png')} style={styles.roomImage} />
+            <View style={styles.roomNameOverlay}>
+              <Text style={styles.roomName}>Mantra</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('BraceletColors')}>
+            <Image source={require('./assets/6.png')} style={styles.roomImage} />
+            <View style={styles.roomNameOverlay}>
+              <Text style={styles.roomName}>Bracelet Colors</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('AppConfig')}>
+            <Image source={require('./assets/7.png')} style={styles.roomImage} />
+            <View style={styles.roomNameOverlay}>
+              <Text style={styles.roomName}>App Configuration</Text>
+            </View>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
+    </ImageBackground>
   );
 }
 
@@ -120,18 +126,20 @@ const App = () => {
       <Stack.Screen name="Mantra" component={Mantra} />
       <Stack.Screen name="BraceletColors" component={BraceletColors} />
       <Stack.Screen name="Assistance" component={Assistance} />
+      <Stack.Screen name="SetupComplete" component={SetupComplete} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-
-
-
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#FEF7F3',
+    backgroundColor: 'transparent',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     paddingTop: 100,

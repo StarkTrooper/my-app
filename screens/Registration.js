@@ -7,18 +7,19 @@ export default function Registration() {
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
   const navigation = useNavigation();
 
-  //Email Validation
+  // Email Validation
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
   const handleSignUp = () => {
-    if (!name || !lastName || !email || !age || !gender) {
+    if (!name || !lastName || !email || !password || !age || !gender) {
       Alert.alert('Error', 'Please fill all fields');
       return;
     }
@@ -33,7 +34,7 @@ export default function Registration() {
 
   return (
     <ImageBackground
-      source={require('../assets/background.jpeg')}
+      source={require('../assets/Designer2.jpeg')}
       style={styles.background}
     >
       <View style={styles.container}>
@@ -63,6 +64,14 @@ export default function Registration() {
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#888"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={true}
           />
           <View style={styles.pickerContainer}>
             <Text style={styles.pickerLabel}>Age</Text>
@@ -137,9 +146,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   pickerLabel: {
-    fontSize: 16,
-    color: '#000',
+    fontSize: 20,
+    color: 'white',
     marginBottom: 5,
+    //backgroundColor: '#94b5d4',
+    textShadowColor: "white",
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   picker: {
     width: '100%',
