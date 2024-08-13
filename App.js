@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { ThemeProvider, useTheme } from './screens/ThemeContext';
+import { getThemeStyles } from './screens/themestyle';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Animated, ImageBackground } from 'react-native';
 import Family from './screens/Family.js';
 import Devices from './screens/Devices.js';
@@ -20,6 +22,8 @@ import SetupComplete from './screens/SetupComplete.js';
 const Stack = createStackNavigator();
 
 const HomeScreen = ({route, navigation }) => {
+  const { isDarkMode } = useTheme();
+  const styles = getThemeStyles(isDarkMode);
   const { name } = route.params || { name: 'Gaddiel' };
   const [menuVisible, setMenuVisible] = useState(false);
   const menuAnimation = useRef(new Animated.Value(-200)).current;
@@ -38,8 +42,8 @@ const HomeScreen = ({route, navigation }) => {
 
   return (
     <ImageBackground
-      source={require('./assets/11.png')} // Replace with your image path
-      style={styles.backgroundImage}
+      source={require('./assets/8.png')}
+      style={styles.background}
     >
       <View style={styles.container}>
         <Animated.View style={[styles.menuButtonContainer, { transform: [{ translateX: menuAnimation }] }]}>
@@ -110,30 +114,32 @@ const HomeScreen = ({route, navigation }) => {
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Appstart">
-      <Stack.Screen name="AppStart" component={Appstart} options={{ headerShown: false }} />
-      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="SignUp" component={SignUp} />
-      <Stack.Screen name="Registration" component={Registration} />
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Bluetooth" component={Bluetooth} />
-      <Stack.Screen name="Family" component={Family} />
-      <Stack.Screen name="Devices" component={Devices} />
-      <Stack.Screen name="Settings" component={Settings} />
-      <Stack.Screen name="SendVibes" component={SendVibes} />
-      <Stack.Screen name="Meditation" component={Meditation} />
-      <Stack.Screen name="Mantra" component={Mantra} />
-      <Stack.Screen name="BraceletColors" component={BraceletColors} />
-      <Stack.Screen name="Assistance" component={Assistance} />
-      <Stack.Screen name="SetupComplete" component={SetupComplete} options={{ headerShown: false }} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ThemeProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Appstart">
+        <Stack.Screen name="AppStart" component={Appstart} options={{ headerShown: false }} />
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="Registration" component={Registration} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Bluetooth" component={Bluetooth} />
+        <Stack.Screen name="Family" component={Family} />
+        <Stack.Screen name="Devices" component={Devices} />
+        <Stack.Screen name="Settings" component={Settings} />
+        <Stack.Screen name="SendVibes" component={SendVibes} />
+        <Stack.Screen name="Meditation" component={Meditation} />
+        <Stack.Screen name="Mantra" component={Mantra} />
+        <Stack.Screen name="BraceletColors" component={BraceletColors} />
+        <Stack.Screen name="Assistance" component={Assistance} />
+        <Stack.Screen name="SetupComplete" component={SetupComplete} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
 
 const styles = StyleSheet.create({
-  backgroundImage: {
+  background: {
     flex: 1,
     resizeMode: 'cover',
   },

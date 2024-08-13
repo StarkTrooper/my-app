@@ -19,7 +19,7 @@ export default function LoginScreen() {
     // Simulate an API call
     setTimeout(() => {
       setLoading(false);
-      if (username === 'hello@hello.com' && password === 'Password') {
+      if (username === 'hello@hello.com' && password === 'A') {
         navigation.replace('Home');
       } else {
         Alert.alert('Error', 'Invalid credentials');
