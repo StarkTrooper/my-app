@@ -51,12 +51,12 @@ const Menu = () => {
 const styles = StyleSheet.create({
   menuButtonContainer: {
     position: 'absolute',
-    top: 40,
-    right: 170,
+    top: 10,
+    right: 125,
     zIndex: 9,
   },
   menuButton: {
-    backgroundColor: '#FEF7F3',
+    backgroundColor: '#41b7d4',
     borderRadius: 50,
     width: 30,
     height: 30,
@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
   },
   menuButtonText: {
     fontSize: 24,
+    bottom: 2,
     color: '#333',
   },
   sideMenu: {

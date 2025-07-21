@@ -9,163 +9,111 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 const BluetoothScreen = ({ navigation }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [devices, setDevices] = useState([]);
-  const [connectedDevice, setConnectedDevice] = useState(null);
-  const [temperature, setTemperature] = useState(null);
+  const [connectedDevice, setConnectedDevice] = useState(false);
+  const [temperature, setTemperature] = useState(false);
+  const [pressure, setPressure] = useState(false);
 
   useEffect(() => {
-    const initializeBleManager = async () => {
-      try {
-        await BleManager.start({ showAlert: false });
-        console.log('BleManager started');
+    const initializeBle = async () => {
+      await BleManager.start({ showAlert: false });
+      console.log('BleManager started');
+      if (Platform.OS === 'android') await requestPermissions();
+    };
 
-        if (Platform.OS === 'android') {
-          await requestPermissions();
-        }
-      } catch (error) {
-        console.error('BleManager initialization error', error);
+    initializeBle();
+
+    const handleDiscoverPeripheral = (device) => {
+      if (device.name) {
+        console.log('Found device:', device.name);
+        setDevices(prev => prev.some(d => d.id === device.id) ? prev : [...prev, device]);
       }
     };
 
-    initializeBleManager();
+    const handleStopScan = () => setIsScanning(false);
 
-    const handleDiscoverPeripheral = (device) => {
-      console.log('Discovered', device);
-      setDevices(prevDevices => {
-        if (!prevDevices.some(d => d.id === device.id)) {
-          return [...prevDevices, device];
-        }
-        return prevDevices;
-      });
+    const handleNotification = (data) => {
+      const buffer = Buffer.from(data.value);
+      const value = buffer.readInt16LE(0);
+      console.log(Notification from ${data.characteristic}: ${value});
+
+      if (data.characteristic.toLowerCase().includes('2a6d')) {
+        setPressure(value / 100);
+        console.log("Pressure:", value / 100);
+      } else if (data.characteristic.toLowerCase().includes('2a6e')) {
+        setTemperature(value / 100);
+        console.log("Temperature:", value / 100);
+      }
     };
 
     bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral);
     bleManagerEmitter.addListener('BleManagerStopScan', handleStopScan);
+    bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', handleNotification);
 
     return () => {
       BleManager.stopScan();
-      bleManagerEmitter.removeAllListeners('BleManagerDiscoverPeripheral', handleDiscoverPeripheral);
-      bleManagerEmitter.removeAllListeners('BleManagerStopScan', handleStopScan);
+      bleManagerEmitter.removeAllListeners('BleManagerDiscoverPeripheral');
+      bleManagerEmitter.removeAllListeners('BleManagerStopScan');
+      bleManagerEmitter.removeAllListeners('BleManagerDidUpdateValueForCharacteristic');
     };
   }, []);
 
   const requestPermissions = async () => {
-    try {
-      const permissions = [
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-        PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-      ];
-
-      const granted = await PermissionsAndroid.requestMultiple(permissions);
-
-      const allPermissionsGranted = permissions.every(permission => granted[permission] === PermissionsAndroid.RESULTS.GRANTED);
-
-      if (allPermissionsGranted) {
-        console.log("All permissions granted");
-      } else {
-        Alert.alert("Permission denied", "Bluetooth permissions are required for scanning.");
-      }
-    } catch (err) {
-      console.warn(err);
-    }
+    const permissions = [
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
+      PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+    ];
+    const granted = await PermissionsAndroid.requestMultiple(permissions);
+    const allGranted = permissions.every(p => granted[p] === PermissionsAndroid.RESULTS.GRANTED);
+    if (!allGranted) Alert.alert('Permissions required');
   };
 
   const startScan = () => {
     if (!isScanning) {
-      setDevices([]); // Clear the list before starting a new scan
-      BleManager.scan([], 5, true)
-        .then(() => {
-          console.log('Scanning...');
-          setIsScanning(true);
-        })
-        .catch(err => {
-          console.error('Scan error', err);
-        });
+      setDevices([]);
+      BleManager.scan([], 5, true).then(() => setIsScanning(true));
     }
   };
 
-  const handleStopScan = () => {
-    console.log('Scan stopped');
-    setIsScanning(false);
-  };
-
   const connectToDevice = (device) => {
-    BleManager.connect(device.id)
-      .then(() => {
-        console.log('Connected to', device.id);
-        setConnectedDevice(device);
+    BleManager.connect(device.id).then(() => {
+      console.log('Connected:', device.id);
+      setConnectedDevice(device);
 
-        BleManager.retrieveServices(device.id)
-          .then(peripheralInfo => {
-            console.log('Peripheral info:', peripheralInfo);
-            readTemperature(device.id);
-            navigation.navigate('SignUp');
-          });
-      })
-      .catch(error => {
-        console.log('Connection error', error);
+      BleManager.retrieveServices(device.id).then(() => {
+        const serviceUUID = '181a';
+        BleManager.startNotification(device.id, serviceUUID, '2a6d').catch(console.error);
+        BleManager.startNotification(device.id, serviceUUID, '2a6e').catch(console.error);
+        navigation.navigate('SignUp');
       });
-  };
-
-  const readTemperature = (deviceId) => {
-    const serviceUUID = '38a03671-d9ca-42b6-8d68-a54d269cfcd7';  // service UUID
-    const characteristicUUID = '38a03671-d9ca-42b6-8d68-a54d269cfcd7';  // characteristic UUID
-
-    BleManager.read(deviceId, serviceUUID, characteristicUUID)
-      .then(readData => {
-        const buffer = Buffer.from(readData);
-        const temp = buffer.readUInt32LE(0);
-        setTemperature(temp);
-        console.log('Temperature:', temp);
-      })
-      .catch(error => {
-        console.log('Read error', error);
-      });
-  };
-
-  const sendCommand = (deviceId, cmd) => {
-    const serviceUUID = '38a03671-d9ca-42b6-8d68-a54d269cfcd7';  // service UUID
-    const characteristicUUID = '38a03671-d9ca-42b6-8d68-a54d269cfcd7';  // characteristic UUID
-
-    const buffer = Buffer.from(cmd, 'utf8');
-    BleManager.write(deviceId, serviceUUID, characteristicUUID, buffer.toJSON().data)
-      .then(() => {
-        console.log('Command sent');
-      })
-      .catch(error => {
-        console.log('Write error', error);
-      });
+    });
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.titletext}>Bluetooth Example</Text>
+
       <TouchableOpacity style={styles.button} onPress={startScan}>
         <Text style={styles.buttonText}>Start Scan</Text>
       </TouchableOpacity>
+
       {isScanning && <Text style={styles.scanningText}>Scanning...</Text>}
-      {/* <TouchableOpacity style={styles.button} onPress={() => BleManager.stopScan()}>
-        <Text style={styles.buttonText}>Stop Scan</Text>
-      </TouchableOpacity> */}
-      <TouchableOpacity style={styles.skipbutton} onPress={() => navigation.navigate('SignUp')}>
-        <Text style={styles.buttonText}>Skip</Text>
-      </TouchableOpacity>
+
       <FlatList
         data={devices}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.deviceButton} onPress={() => connectToDevice(item)}>
             <Text style={styles.deviceText}>{item.name || item.id}</Text>
           </TouchableOpacity>
         )}
       />
+
       {connectedDevice && (
         <View>
           <Text style={styles.connectedText}>Connected to {connectedDevice.name || connectedDevice.id}</Text>
-          <Text style={styles.temperatureText}>Temperature: {temperature}</Text>
-          <TouchableOpacity style={styles.button} onPress={() => sendCommand(connectedDevice.id, 'YourCommand')}>
-            <Text style={styles.buttonText}>Send Command</Text>
-          </TouchableOpacity>
+          {pressure !== null && <Text style={styles.connectedText}>Pressure: {pressure} cPa</Text>}
+          {temperature !== null && <Text style={styles.connectedText}>Temperature: {temperature} °C</Text>}
         </View>
       )}
     </View>

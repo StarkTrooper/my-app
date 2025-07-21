@@ -13,7 +13,7 @@ const SetupComplete = ({ navigation }) => {
       />
       <Text style={styles.title}>Setup Complete</Text>
       <Text style={styles.subtitle}>This phone is now registered to you and can be used to access work resources.</Text>
-      <TouchableOpacity style={styles.doneButton} onPress={() => navigation.navigate('Devices')}>
+      <TouchableOpacity style={styles.doneButton} onPress={() => navigation.navigate('Home')}>
         <Text style={styles.doneButtonText}>Done</Text>
       </TouchableOpacity>
     </View>
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   lottie: {
-    width: 150,  // Adjust size as necessary
+    width: 150,  
     height: 150, 
     marginBottom: 20,
   },

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, PermissionsAndroid, Alert, Platform } from 'react-native';
-import QRCodeScanner from 'react-native-qrcode-scanner';
-import { RNCamera } from 'react-native-camera';
+import { StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+
 
 const Devices = ({ navigation }) => {
-  const [connectedDevice, setConnectedDevice] = useState(null);
+/*  const [connectedDevice, setConnectedDevice] = useState(null);
   const [scanning, setScanning] = useState(false);
   const [cameraAuthorized, setCameraAuthorized] = useState(false);
   const [permissionDenied, setPermissionDenied] = useState(false);
@@ -75,51 +74,18 @@ const Devices = ({ navigation }) => {
     } else if (!permissionDenied) {
       requestCameraPermission();
     }
-  };
+  }; */
 
   return (
     <View style={styles.container}>
-      {!connectedDevice && !scanning && (
         <View style={styles.scanContainer}>
           <Text style={styles.title}>Scan QR Code</Text>
-          <Text style={styles.subtitle}>You can find the QR code on your desktop.</Text>
+          <Text style={styles.subtitle}>You can find the QR code on your device's boxn.</Text>
           <Image source={require('../assets/IMG_5787.jpg')} style={styles.qrPlaceholder} />
           <TouchableOpacity style={styles.scanButton} onPress={startScanning}>
             <Text style={styles.scanButtonText}>Scan QR Code</Text>
           </TouchableOpacity>
         </View>
-      )}
-
-      {scanning && cameraAuthorized && (
-        <QRCodeScanner
-          onRead={onSuccess}
-          flashMode={RNCamera.Constants.FlashMode.auto}
-          topContent={<Text style={styles.centerText}>Scan the QR code to register your device</Text>}
-          bottomContent={<TouchableOpacity style={styles.cancelButton} onPress={() => setScanning(false)}>
-            <Text style={styles.cancelButtonText}>Cancel</Text>
-          </TouchableOpacity>}
-        />
-      )}
-
-      {!cameraAuthorized && !scanning && permissionDenied && (
-        <View style={styles.scanContainer}>
-          <Text style={styles.subtitle}>Camera not authorized</Text>
-          <TouchableOpacity style={styles.scanButton} onPress={requestCameraPermission}>
-            <Text style={styles.scanButtonText}>Grant Camera Permission</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {connectedDevice && (
-        <View style={styles.deviceContainer}>
-          <Text style={styles.title}>Connected Device</Text>
-          <Image source={require('../assets/IMG_5787.jpg')} style={styles.deviceImage} />
-          <Text style={styles.deviceName}>{connectedDevice.name}</Text>
-          <TouchableOpacity style={styles.newDeviceButton} onPress={startScanning}>
-            <Text style={styles.newDeviceButtonText}>Register a New Device</Text>
-          </TouchableOpacity>
-        </View>
-      )}
     </View>
   );
 };
@@ -130,6 +96,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
+    backgroundColor: '#5f86ad',
+
   },
   scanContainer: {
     alignItems: 'center',

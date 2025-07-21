@@ -34,7 +34,7 @@ export default function Registration() {
 
   return (
     <ImageBackground
-      source={require('../assets/Designer2.jpeg')}
+      source={require('../assets/appstart4.jpeg')}
       style={styles.background}
     >
       <View style={styles.container}>
@@ -147,10 +147,12 @@ const styles = StyleSheet.create({
   },
   pickerLabel: {
     fontSize: 20,
-    color: 'white',
+    color: 'black',
     marginBottom: 5,
     //backgroundColor: '#94b5d4',
     textShadowColor: "white",
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10,
     fontWeight: 'bold',
     textAlign: 'center',
   },

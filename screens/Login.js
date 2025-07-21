@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+
 export default function LoginScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -19,7 +20,7 @@ export default function LoginScreen() {
     // Simulate an API call
     setTimeout(() => {
       setLoading(false);
-      if (username === 'hello@hello.com' && password === 'A') {
+      if (username === 'a@a.com' && password === 'A') {
         navigation.replace('Home');
       } else {
         Alert.alert('Error', 'Invalid credentials');
@@ -28,67 +29,59 @@ export default function LoginScreen() {
   };
 
   return (
-    <ImageBackground
-      source={require('../assets/8.png')}
-      style={styles.background}
-    >
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Log In</Text>
-          <Text style={styles.subtitle}>Please enter Email and Password</Text>
-        </View>
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={username}
-            onChangeText={setUsername}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-          />
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            {loading ? (
-              <ActivityIndicator color="#FFF" />
-            ) : (
-              <Text style={styles.buttonText}>Sign In</Text>
-            )}
-          </TouchableOpacity>
-          <Text style={styles.forgotPassword}>Forgotten password?</Text>
-        </View>
-        <View style={styles.socialButtons}>
-          <TouchableOpacity style={styles.socialButton}>
-            <Text style={styles.socialButtonText}>Facebook</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton}>
-            <Text style={styles.socialButtonText}>Gmail</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Don't have an account? <Text style={styles.signUpText} onPress={() => navigation.navigate('SignUp')}>Sign Up</Text></Text>
-        </View>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Log In</Text>
+        <Text style={styles.subtitle}>Please enter Email and Password</Text>
       </View>
-    </ImageBackground>
+      <View style={styles.form}>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={username}
+          onChangeText={setUsername}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          {loading ? (
+            <ActivityIndicator color="#FFF" />
+          ) : (
+            <Text style={styles.buttonText}>Sign In</Text>
+          )}
+        </TouchableOpacity>
+        <Text style={styles.forgotPassword}>Forgotten password?</Text>
+      </View>
+      <View style={styles.socialButtons}>
+        <TouchableOpacity style={styles.socialButton}>
+          <Text style={styles.socialButtonText}>Facebook</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.socialButton}>
+          <Text style={styles.socialButtonText}>Gmail</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Don't have an account? <Text style={styles.signUpText} onPress={() => navigation.navigate('SignUp')}>Sign Up</Text></Text>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    resizeMode: 'cover',
-  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 130,
+    backgroundColor: '#2C3E50',
   },
   header: {
     alignItems: 'center',
@@ -131,7 +124,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   forgotPassword: {
-    color: 'black',
+    color: 'gray',
     textDecorationLine: 'underline',
     marginBottom: 20,
   },
@@ -160,10 +153,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   footerText: {
-    color: '#000',
+    color: 'white',
   },
   signUpText: {
-    color: '#000',
+    color: 'white',
     fontWeight: 'bold',
     textDecorationLine: 'underline',
   },

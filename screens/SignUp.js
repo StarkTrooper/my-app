@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react
 export default function Signup({ navigation }) {
   return (
     <ImageBackground 
-      source={require('../assets/Designer2.jpeg')} 
+      source={require('../assets/appstart.jpeg')} 
       style={styles.background}>
 
       <View style={styles.container}>
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    color: '#000',
+    color: '#333333',
     marginBottom: 40,
   },
   buttonSignIn: {

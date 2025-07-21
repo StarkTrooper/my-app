@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { SafeAreaView, View, Text, ScrollView, TouchableOpacity, ImageBackground, StyleSheet } from 'react-native';
+import LottieView from 'lottie-react-native';
 import { ThemeProvider, useTheme } from './screens/ThemeContext';
 import { getThemeStyles } from './screens/themestyle';
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Animated, ImageBackground } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 import Family from './screens/Family.js';
 import Devices from './screens/Devices.js';
-import Mantra from './screens/Mantra.js';
+import Mantra from './screens/Mantra.js'; 
 import Settings from './screens/Settings.js';
 import Assistance from './screens/Assistance.js';
 import BraceletColors from './screens/BraceletColors.js';
@@ -19,98 +21,55 @@ import Registration from './screens/Registration.js';
 import Bluetooth from './screens/Bluetooth.js';
 import SetupComplete from './screens/SetupComplete.js';
 
+
+
 const Stack = createStackNavigator();
 
-const HomeScreen = ({route, navigation }) => {
-  const { isDarkMode } = useTheme();
-  const styles = getThemeStyles(isDarkMode);
+const HomeScreen = ({ route, navigation }) => {
   const { name } = route.params || { name: 'Gaddiel' };
-  const [menuVisible, setMenuVisible] = useState(false);
-  const menuAnimation = useRef(new Animated.Value(-200)).current;
-
-  useEffect(() => {
-    Animated.timing(menuAnimation, {
-      toValue: menuVisible ? 0 : -200,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-  }, [menuVisible]);
-
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
-  };
 
   return (
-    <ImageBackground
-      source={require('./assets/8.png')}
-      style={styles.background}
-    >
-      <View style={styles.container}>
-        <Animated.View style={[styles.menuButtonContainer, { transform: [{ translateX: menuAnimation }] }]}>
-          <TouchableOpacity style={styles.menuButton} onPress={toggleMenu}>
-            <Text style={styles.menuButtonText}>≡</Text>
-          </TouchableOpacity>
-        </Animated.View>
+    <SafeAreaView style={styles.container}>
+      {/* Top Section (Static) */}
+      <View style={styles.topSection}>
+        <Text style={styles.greeting}>Welcome, {name}!</Text>
 
-        <Animated.View style={[styles.sideMenu, { transform: [{ translateX: menuAnimation }] }]}>
-          <TouchableOpacity onPress={() => navigation.navigate('Family')}>
-            <Text style={styles.sideMenuText}>Family</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Devices')}>
-            <Text style={styles.sideMenuText}>Devices</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Assistance')}>
-            <Text style={styles.sideMenuText}>Assistance</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-            <Text style={styles.sideMenuText}>Settings</Text>
-          </TouchableOpacity>
-        </Animated.View>
-
-        <View style={styles.header}>
-          <Text style={styles.greeting}>Hello, {name}!</Text>
-          <View style={styles.welcomer}>
-            <Text style={styles.welcome}>Welcome to your wellness app.</Text>
-          </View>
+        {/* Lottie Animation */}
+        <View style={styles.lottieContainer}>
+          <LottieView
+            source={require('./assets/Lottie/LandscapeAnimation.json')}
+            autoPlay
+            loop
+            style={styles.lottie}
+          />
         </View>
-
-        <Text style={styles.roomsTitle}>Shortcuts</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.rooms}>
-          <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('SendVibes')}>
-            <Image source={require('./assets/4.png')} style={styles.roomImage} />
-            <View style={styles.roomNameOverlay}>
-              <Text style={styles.roomName}>Send vibes</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('Meditation')}>
-            <Image source={require('./assets/3.png')} style={styles.roomImage} />
-            <View style={styles.roomNameOverlay}>
-              <Text style={styles.roomName}>Meditation</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('Mantra')}>
-            <Image source={require('./assets/5.png')} style={styles.roomImage} />
-            <View style={styles.roomNameOverlay}>
-              <Text style={styles.roomName}>Mantra</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('BraceletColors')}>
-            <Image source={require('./assets/6.png')} style={styles.roomImage} />
-            <View style={styles.roomNameOverlay}>
-              <Text style={styles.roomName}>Bracelet Colors</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.roomCard} onPress={() => navigation.navigate('AppConfig')}>
-            <Image source={require('./assets/7.png')} style={styles.roomImage} />
-            <View style={styles.roomNameOverlay}>
-              <Text style={styles.roomName}>App Configuration</Text>
-            </View>
-          </TouchableOpacity>
-        </ScrollView>
       </View>
-    </ImageBackground>
+
+      {/* Bottom Section (Scrollable) */}
+      <ScrollView style={styles.bottomSection} contentContainerStyle={styles.scrollContent}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Settings')}>
+          <Text style={styles.buttonText}>Settings</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Devices')}>
+          <Text style={styles.buttonText}>Devices</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SendVibes')}>
+          <Text style={styles.buttonText}>Send Vibes</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Bluetooth')}>
+          <Text style={styles.buttonText}>Bluetooth</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Meditation')}>
+          <Text style={styles.buttonText}>Meditation</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
-}
+};
 
 const App = () => {
   return (
@@ -139,118 +98,62 @@ const App = () => {
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    resizeMode: 'cover',
-  },
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    paddingTop: 100,
+    backgroundColor: '#5f86ad',
   },
-  menuButtonContainer: {
-    position: 'absolute',
-    top: 40,
-    right: 170,
-    zIndex: 9,
-  },
-  menuButton: {
-    backgroundColor: '#FEF7F3',
-    borderRadius: 50,
-    width: 30,
-    height: 30,
+  topSection: {
+    height: '50%', 
+    backgroundColor: '#2C3E50',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-  },
-  menuButtonText: {
-    fontSize: 24,
-    color: '#333',
-  },
-  sideMenu: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: 200,
-    height: '150%',
-    backgroundColor: '#876',
-    padding: 20,
-    zIndex: 9,
-    paddingTop: 85,
-    borderRadius: 15,
-  },
-  sideMenuText: {
-    fontSize: 25,
-    color: '#FFF',
-    marginVertical: 10,
-  },
-  header: {
-    alignItems: 'flex-start',
-    paddingLeft: 45,
-  },
-  welcomer: {
-    paddingTop: 10,
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
   },
   greeting: {
-    fontSize: 30,
-    fontWeight: '600',
-    color: '#333',
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 25,
+    paddingBottom:20,
   },
-  welcome: {
-    fontSize: 20,
-    fontWeight: '300',
-    color: '#666',
-  },
-  roomsContainer: {
-    width: '90%',
-  },
-  roomsTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#333',
-    marginTop: 100,
-    marginLeft: 50,
-  },
-  rooms: {
-    paddingTop: 50,
-  },
-  roomCard: {
-    width: 165,
-    height: 345,
+  lottieContainer: {
+    width: 180,
+    height: 180,
+    borderRadius: 90,
     backgroundColor: '#FFF',
-    borderRadius: 20,
-    marginHorizontal: 10,
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    shadowColor: '#b4baa2',
-    shadowOffset: { width: 3, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
+    justifyContent: 'center',
     overflow: 'hidden',
   },
-  roomImage: {
+  lottie: {
     width: '100%',
     height: '100%',
-    borderRadius: 20,
   },
-  roomNameOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    paddingVertical: 10,
+  bottomSection: {
+    flex: 1,
+    backgroundColor: '#5f86ad',
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingTop: 20,
+    paddingHorizontal: 20,
+  },
+  scrollContent: {
     alignItems: 'center',
+    paddingVertical: 20,
   },
-  roomName: {
+  button: {
+    width: '90%',
+    paddingVertical: 15,
+    backgroundColor: '#2C3E50',
+    borderRadius: 20,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  buttonText: {
     fontSize: 18,
-    fontWeight: '600',
     color: '#FFF',
+    fontWeight: 'bold',
   },
 });
 

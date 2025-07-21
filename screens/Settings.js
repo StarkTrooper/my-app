@@ -57,7 +57,7 @@ export default function Settings() {
         </TouchableOpacity>
         <TouchableOpacity onPress={removeImage}>
           <Text style={[styles.removeText, { color: theme === 'light' ? 'red' : '#FF7F7F' }]}>
-            Remove Picture
+            Change Picture
           </Text>
         </TouchableOpacity>
         <Text style={[styles.name, { color: theme === 'light' ? '#000' : '#FFF' }]}>
